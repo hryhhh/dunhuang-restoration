@@ -1,0 +1,134 @@
+// 核心文化色系（基础色调）
+// 石青系
+$color-blue-primary: #2a5c8e; // 群青
+$color-blue-secondary: #4682b4; // 钢青
+$color-blue-light: #e0f2fe; // 天青淡彩
+
+// 石绿系
+$color-green-primary: #6b8e23; // 橄榄绿
+$color-green-secondary: #9acd32; // 黄绿
+$color-green-light: #f0fff0; // 蝉翼白
+
+// 朱砂系
+$color-red-primary: #cd5c5c; // 印度红
+$color-red-secondary: #ff6b6b; // 珊瑚红
+$color-red-light: #ffe4e1; // 淡胭脂
+
+// 赭石系
+$color-ochre-primary: #a0522d; // 棕褐
+$color-ochre-secondary: #d2b48c; // 沙色
+$color-ochre-light: #f5f5dc; // 米黄
+
+// 功能分区色系
+$color-original-bg: #f5f5dc; // 米黄渐变
+$color-original-border: #d2b48c; // 沙色线条
+$color-operation-main: #4682b4; // 钢青
+$color-operation-button: #9acd32; // 黄绿悬浮效果
+$color-history-timeline: #a0522d; // 棕褐渐变
+$color-history-marker: #ff6b6b; // 珊瑚红圆点
+
+// 辅助工具色系
+$color-gold: #ffd700; // 金色
+$color-white: #ffffff; // 纯白
+$color-gray: #808080; // 中灰
+
+// 动态效果色系
+$color-success-bg: #90ee90; // 淡绿渐变
+$color-success-icon: #2e8b57; // 海藻绿
+$color-error-bg: #ffb6c1; // 淡粉红
+$color-error-text: #ff0000; // 正红
+
+// 状态颜色
+$color-status-completed: $color-green-primary;
+$color-status-in-progress: $color-blue-primary;
+$color-status-pending: $color-ochre-primary;
+
+// 其他基础颜色
+$color-black: #000000;
+$color-background: #f9fafb;
+$color-border: #e5e7eb;
+$color-gray-50: #f9fafb;
+$color-gray-100: #f3f4f6;
+$color-gray-200: #e5e7eb;
+$color-gray-300: #d1d5db;
+$color-gray-400: #9ca3af;
+$color-gray-500: #6b7280;
+$color-gray-600: #4b5563;
+$color-gray-700: #374151;
+$color-gray-800: #1f2937;
+$color-gray-900: #111827;
+
+// 社交媒体颜色
+$color-wechat: #07C160;
+$color-weibo: #E6162D;
+
+$font-family-base:
+  system-ui,
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  Oxygen,
+  Ubuntu,
+  Cantarell,
+  'Open Sans',
+  'Helvetica Neue',
+  sans-serif;
+$font-size-xs: 0.75rem;
+$font-size-sm: 0.875rem;
+$font-size-base: 1rem;
+$font-size-lg: 1.125rem;
+$font-size-xl: 1.25rem;
+$font-size-2xl: 1.5rem;
+$font-size-3xl: 1.875rem;
+$font-size-4xl: 2.25rem;
+$font-size-5xl: 3rem;
+
+$border-radius-sm: 0.25rem;
+$border-radius: 0.375rem;
+$border-radius-lg: 0.5rem;
+$border-radius-xl: 0.75rem;
+$border-radius-2xl: 1rem;
+$border-radius-full: 9999px;
+
+$spacing-1: 0.25rem;
+$spacing-2: 0.5rem;
+$spacing-3: 0.75rem;
+$spacing-4: 1rem;
+$spacing-5: 1.25rem;
+$spacing-6: 1.5rem;
+$spacing-8: 2rem;
+$spacing-10: 2.5rem;
+$spacing-12: 3rem;
+$spacing-16: 4rem;
+$spacing-20: 5rem;
+$spacing-24: 6rem;
+$spacing-32: 8rem;
+$spacing-40: 10rem;
+$spacing-48: 12rem;
+$spacing-64: 16rem;
+
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;
+
+
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+
+$container-padding: $spacing-4;
+$container-max-width: 1400px;
+
+$transition-base: all 0.2s ease-in-out;
+
+// 尺寸变量
+$sidebar-width: 240px;
+$sidebar-collapsed-width: 64px;
+$header-height: 64px;
+$border-radius: 8px;
+$box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
