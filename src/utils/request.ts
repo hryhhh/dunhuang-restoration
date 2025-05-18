@@ -1,30 +1,66 @@
-import axios from 'axios';
-import { removeToken, getToken, setToken } from './auth';
-import { tansParams } from './common';
-import cache from './cache';
+import axios, { type AxiosResponse } from 'axios'
+import type { InternalAxiosRequestConfig } from 'axios'
+import { removeToken, getToken, setToken } from './token'
+import { tansParams } from './common'
+import cache from './cache'
 import { ElNotification, ElMessageBox, ElMessage, ElLoading } from 'element-plus'
 import errorCode from './errorCode'
-import  useUserStore  from '@/store/modules/user';
+import useUserStore from '@/store/modules/user'
+import { encrypt } from './encrypt'
 
+
+// 定义重试相关的常量
+const MAX_RETRIES = 3
+const RETRY_DELAY = 1000
+
+// 扩展 AxiosRequestConfig 类型
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+  retryCount?: number
+  istoken?: boolean
+  isRepeatSubmit?: boolean
+}
 export let isRelogin = { show: false }
 
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 
 const request = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 5000,
-});
+})
 
 // 请求拦截器
 request.interceptors.request.use(
-  (config) => {
+  async (config: CustomAxiosRequestConfig) => {
+    // 添加请求计数
+    config.retryCount = config.retryCount || 0
+
+    const token = getToken()
+    const excludeUrls = ['/user/login', '/user/register']
     // 是否需要设置 token
-    const istoken = (config.headers || {}).istoken === false
-    //
+    const istoken = (config.headers || {})?.istoken === false
     const isRepeatSubmit = (config.headers || {}).isRepeatSubmit === false
-    if (getToken() && !istoken) {
-      config.headers['Authorization'] = 'Bearer ' + getToken();
+
+
+    if (token && !excludeUrls.includes(config.url || '')) {
+      config.headers = config.headers || {}
+      config.headers['Authorization'] = 'Bearer ${token}'
+
+      // 添加token过期检查
+      if (token.includes('.')) {
+        try {
+          const tokenExp = JSON.parse(atob(token.split('.')[1])).exp
+          if (tokenExp && Date.now() >= tokenExp * 1000) {
+            throw new Error('Token已过期')
+          }
+        } catch (error) {
+          // token刷新失败，清除用户信息
+          // useUserStore().logout()
+          return Promise.reject('Token已过期，请重新登录')
+        }
+      }
     }
+
+
     // get请求映射params参数
     if (config.method === 'get' && config.params) {
       let url = config.url + '?' + tansParams(config.params)
@@ -67,23 +103,34 @@ request.interceptors.request.use(
         }
       }
     }
-    return config;
+
+      // 加密敏感数据
+    if (config.method === 'post' && config.data?.password) {
+      config.data.password = encrypt(config.data.password)
+    }
+    return config
   },
-  (error) => {
-    console.log(error);
-    return Promise.reject(error);
-  },
-);
+  async (error:any) => {
+    // 请求重试机制
+    const config = error.config as CustomAxiosRequestConfig
+    if (config?.retryCount && config.retryCount < MAX_RETRIES) {
+      config.retryCount += 1
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY))
+      return request(config)
+    }
+    return Promise.reject(error)
+  }
+)
 
 // 响应拦截器
 request.interceptors.response.use(
-  (res) => {
+  (res: AxiosResponse) => {
     // 未设置状态码则默认成功状态
     const code = res.data.code || 200
     // 获取错误信息
     // 将数字 code 转换为字符串，并断言为 errorCode 的有效键类型
-    const codeKey = String(code) as keyof typeof errorCode;
-    const msg = errorCode[codeKey] || res.data.msg || errorCode['default'];
+    const codeKey = String(code) as keyof typeof errorCode
+    const msg = errorCode[codeKey] || res.data.msg || errorCode['default']
     // 二进制数据则直接返回
     if (res.request.responseType === 'blob' || res.request.responseType === 'arraybuffer') {
       return res.data
@@ -99,10 +146,10 @@ request.interceptors.response.use(
           .then(() => {
             isRelogin.show = false
             useUserStore()
-              // .logOut()
-              // .then(() => {
-              //   location.href = '/index'
-              // })
+            .logout()
+            .then(() => {
+              location.href = '/index'
+            })
           })
           .catch(() => {
             isRelogin.show = false
@@ -122,7 +169,7 @@ request.interceptors.response.use(
       return Promise.resolve(res.data)
     }
   },
-  (error) => {
+  (error:any) => {
     console.log('err' + error)
     let { message } = error
     if (message == 'Network Error') {

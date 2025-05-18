@@ -120,21 +120,21 @@
 </template>
 
 <script setup lang="ts">
-import Footer from '@/components/home/Footer.vue'
+import Footer from '../components/home/Footer.vue'
 import { ref } from 'vue'
 import Cookies from 'js-cookie'
 import { useRouter } from 'vue-router'
-import  useUserStore  from '@/store/modules/user'
-// import { encrypt } from '@/utils/encrypt' // 假设 encrypt 方法在 utils/encrypt 中
+import  useUserStore  from '../store/modules/user'
+import { encrypt } from '@/utils/encrypt'
 
 // 当前激活的标签
 const activeTab = ref('login')
 const loading = ref(false)
 // const redirect: any = ref(null)
 
-// 是否显示密码
-const showPassword = ref(false)
-const showConfirmPassword = ref(false)
+// // 是否显示密码
+// const showPassword = ref(false)
+// const showConfirmPassword = ref(false)
 
 // 引入路由
 const router = useRouter()
@@ -185,7 +185,7 @@ const registerRules = {
 
 // 登录处理
 function handleLogin() {
-  const loginRef = ref() // 修复 Proxy.$refs 未定义的问题
+  const loginRef = ref()
   loginRef.value?.validate((valid: boolean) => {
     if (valid) {
       loading.value = true
@@ -207,7 +207,7 @@ function handleLogin() {
           // 假设登录成功后返回用户角色
           const role = res.data.role
           if (role === 'admin') {
-            router.push('/dashboard')
+            router.push('/admin')
           } else {
             router.push('/repair')
           }

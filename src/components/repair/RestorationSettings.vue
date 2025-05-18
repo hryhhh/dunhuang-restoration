@@ -124,6 +124,7 @@
 
   <style lang="scss">
     @use '../../styles/main.scss' as *;
+    @use 'sass:color';
 
   .restoration-settings {
     background-color: $color-white;
@@ -361,7 +362,7 @@
       color: $color-white;
 
       &:hover:not(:disabled) {
-        background-color: darken($color-blue-primary, 10%);
+        background-color: color.adjust($color-blue-primary, $lightness:-10%);
       }
     }
 
