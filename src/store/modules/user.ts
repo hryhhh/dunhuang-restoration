@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getToken, setToken, removeToken } from '@/utils/token'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 import { login, getInfo as getUserInfo } from '@/api/login'
 import { isHttp, isEmpty } from '@/utils/validate'
 import type { UserInfoResponse } from '@/types/user'
@@ -74,7 +74,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-    // 定义登出功能
+  // 定义登出功能
   const logoutAction = async () => {
     try {
       // 可以添加调用登出 API
@@ -115,7 +115,7 @@ export const useUserStore = defineStore('user', () => {
     loginAction,
     getInfo,
     logout: logoutAction,
-    logoutAction
+    logoutAction,
   }
 })
 export default useUserStore

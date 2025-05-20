@@ -111,7 +111,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const goToRepair = () => {
-  router.push({ name: 'repair' });
+  router.push('/repair');
 };
 </script>
 

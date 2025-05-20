@@ -29,7 +29,7 @@
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const goToClick = () => {
-  router.push({ name: 'login' }); 
+  router.push('/login');
 };
 
 </script>

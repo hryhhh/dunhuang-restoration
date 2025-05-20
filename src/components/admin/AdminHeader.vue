@@ -40,7 +40,7 @@
         <input type="text" placeholder="搜索用户或壁画..." />
       </div>
       <div class="header__user">
-        <img src="../assets/images/03.jpg" alt="管理员头像" />
+        <img src="../../assets/images/03.jpg" alt="管理员头像" />
         <div class="header__user-info">
           <span class="header__user-name">管理员</span>
           <span class="header__user-role">超级管理员</span>

@@ -19,6 +19,10 @@ interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
 
 export const constantRoutes: RouteRecordRaw[] = [
   {
+    path: '/redirect/:path(.*)',
+    component:()=> import('../views/Redirect/index.vue' as unknown as string),
+  },
+  {
     path: '/',
     name: 'home',
     component: () => import('../views/HomeView.vue' as unknown as string),
@@ -31,6 +35,16 @@ export const constantRoutes: RouteRecordRaw[] = [
     component: () => import('../views/Login.vue' as unknown as string),
     meta: { title: '登录' },
   },
+  {
+    path: '/repair',
+    name: 'repair',
+    component: () => import('../views/RepairedView.vue'),
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: () => import('../views/AdminDashboard.vue'),
+  }
 
 ]
 

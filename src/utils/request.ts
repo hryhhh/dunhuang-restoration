@@ -1,13 +1,12 @@
 import axios, { type AxiosResponse } from 'axios'
 import type { InternalAxiosRequestConfig } from 'axios'
-import { removeToken, getToken, setToken } from './token'
+import { removeToken, getToken, setToken } from './auth'
 import { tansParams } from './common'
 import cache from './cache'
 import { ElNotification, ElMessageBox, ElMessage, ElLoading } from 'element-plus'
 import errorCode from './errorCode'
 import useUserStore from '@/store/modules/user'
 import { encrypt } from './encrypt'
-
 
 // 定义重试相关的常量
 const MAX_RETRIES = 3
@@ -40,7 +39,6 @@ request.interceptors.request.use(
     const istoken = (config.headers || {})?.istoken === false
     const isRepeatSubmit = (config.headers || {}).isRepeatSubmit === false
 
-
     if (token && !excludeUrls.includes(config.url || '')) {
       config.headers = config.headers || {}
       config.headers['Authorization'] = 'Bearer ${token}'
@@ -54,12 +52,11 @@ request.interceptors.request.use(
           }
         } catch (error) {
           // token刷新失败，清除用户信息
-          // useUserStore().logout()
+          useUserStore().logout()
           return Promise.reject('Token已过期，请重新登录')
         }
       }
     }
-
 
     // get请求映射params参数
     if (config.method === 'get' && config.params) {
@@ -104,22 +101,22 @@ request.interceptors.request.use(
       }
     }
 
-      // 加密敏感数据
+    // 加密敏感数据
     if (config.method === 'post' && config.data?.password) {
       config.data.password = encrypt(config.data.password)
     }
     return config
   },
-  async (error:any) => {
+  async (error: any) => {
     // 请求重试机制
     const config = error.config as CustomAxiosRequestConfig
     if (config?.retryCount && config.retryCount < MAX_RETRIES) {
       config.retryCount += 1
-      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY))
+      await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY))
       return request(config)
     }
     return Promise.reject(error)
-  }
+  },
 )
 
 // 响应拦截器
@@ -146,10 +143,10 @@ request.interceptors.response.use(
           .then(() => {
             isRelogin.show = false
             useUserStore()
-            .logout()
-            .then(() => {
-              location.href = '/index'
-            })
+              .logout()
+              .then(() => {
+                location.href = '/index'
+              })
           })
           .catch(() => {
             isRelogin.show = false
@@ -169,7 +166,7 @@ request.interceptors.response.use(
       return Promise.resolve(res.data)
     }
   },
-  (error:any) => {
+  (error: any) => {
     console.log('err' + error)
     let { message } = error
     if (message == 'Network Error') {

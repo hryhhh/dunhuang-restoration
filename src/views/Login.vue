@@ -23,18 +23,12 @@
       <div class="auth-form-container">
         <!-- 表单切换标签 -->
         <div class="auth-tabs">
-          <button
-            class="auth-tabs__tab"
-            :class="{ 'auth-tabs__tab--active': activeTab === 'login' }"
-            @click="activeTab = 'login'"
-          >
+          <button class="auth-tabs__tab" :class="{ 'auth-tabs__tab--active': activeTab === 'login' }"
+            @click="activeTab = 'login'">
             登录
           </button>
-          <button
-            class="auth-tabs__tab"
-            :class="{ 'auth-tabs__tab--active': activeTab === 'register' }"
-            @click="activeTab = 'register'"
-          >
+          <button class="auth-tabs__tab" :class="{ 'auth-tabs__tab--active': activeTab === 'register' }"
+            @click="activeTab = 'register'">
             注册
           </button>
         </div>
@@ -48,14 +42,10 @@
               <el-input v-model="loginForm.email" type="text" placeholder="请输入邮箱"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-              <el-input
-                v-model="loginForm.password"
-                type="password"
-                placeholder="请输入密码"
-                @keyup.enter="handleLogin"
-              ></el-input>
+              <el-input v-model="loginForm.password" type="password" placeholder="请输入密码"
+                @keyup.enter="handleLogin"></el-input>
             </el-form-item>
-            <el-checkbox :model="loginForm.rememberMe">记住密码</el-checkbox>
+            <el-checkbox v-model="loginForm.rememberMe">记住密码</el-checkbox>
             <el-button type="primary" @click.prevent="handleLogin">
               <span v-if="!loading">登 录</span>
               <span v-else>登 录 中...</span>
@@ -64,53 +54,8 @@
         </div>
 
         <!-- 注册表单 -->
-        <div v-if="activeTab === 'register'" class="auth-form">
-          <h2 class="auth-form__title">创建账号</h2>
-          <p class="auth-form__subtitle">注册一个新账号以使用敦煌壁画修复系统</p>
 
-          <el-form ref="registerRef" :model="registerForm" :rules="registerRules" class="auth-form">
-            <el-form-item label="用户名" prop="username">
-              <el-input
-                v-model="registerForm.username"
-                type="text"
-                placeholder="请输入用户名"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="邮箱" prop="email">
-              <el-input
-                v-model="registerForm.email"
-                type="text"
-                placeholder="请输入邮箱"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="password">
-              <el-input
-                v-model="loginForm.password"
-                type="password"
-                placeholder="请输入密码"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="确认密码" prop="password">
-              <el-input
-                v-model="registerForm.confirmPassword"
-                type="password"
-                placeholder="请再次输入密码"
-                @keyup.enter="handleRegister"
-              ></el-input>
-            </el-form-item>
-            <!-- 勾选同意协议 -->
-            <label class="form-checkbox">
-              <input type="checkbox" v-model="registerForm.agreement" required />
-              <span class="form-checkbox__mark"></span>
-              <span
-                >我已阅读并同意 <a href="#" class="form-link">服务条款</a> 和
-                <a href="#" class="form-link">隐私政策</a></span
-              >
-            </label>
-
-            <el-button @click="handleRegister">注册</el-button>
-          </el-form>
-        </div>
+        <register v-if="activeTab === 'register'" v-model:active-tab="activeTab" />
       </div>
     </div>
 
@@ -123,14 +68,20 @@
 import Footer from '../components/home/Footer.vue'
 import { ref } from 'vue'
 import Cookies from 'js-cookie'
-import { useRouter } from 'vue-router'
-import  useUserStore  from '../store/modules/user'
+import { useRouter, useRoute } from 'vue-router'
+import useUserStore from '../store/modules/user'
 import { encrypt } from '@/utils/encrypt'
+import { ElMessage, ElForm } from 'element-plus'
+import type { FormRules } from 'element-plus'
+import register from './register.vue'
 
 // 当前激活的标签
 const activeTab = ref('login')
 const loading = ref(false)
-// const redirect: any = ref(null)
+const redirect: any = ref(null)
+
+// 定义 loginRef
+const loginRef = ref<InstanceType<typeof ElForm>>()
 
 // // 是否显示密码
 // const showPassword = ref(false)
@@ -138,6 +89,9 @@ const loading = ref(false)
 
 // 引入路由
 const router = useRouter()
+// 从路由参数中获取重定向路径
+const route = useRoute()
+redirect.value = route.query.redirect || '/'
 
 // 使用 userStore
 const userStore = useUserStore()
@@ -149,17 +103,8 @@ const loginForm = ref({
   rememberMe: false,
 })
 
-// 注册表单数据
-const registerForm = ref({
-  username: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-  agreement: false,
-})
-
 // 登录表单验证规则
-const loginRules = {
+const loginRules: FormRules = {
   email: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
     { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] },
@@ -167,81 +112,91 @@ const loginRules = {
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 }
 
-// 注册表单验证规则
-const registerRules = {
-  username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 2, max: 16, message: '用户名长度为2-16位', trigger: 'blur' },
-  ],
-  email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '邮箱格式不正确', trigger: 'blur' },
-  ],
-  password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, max: 20, message: '密码长度为6-20位', trigger: 'blur' },
-  ],
-}
 
 // 登录处理
-function handleLogin() {
-  const loginRef = ref()
-  loginRef.value?.validate((valid: boolean) => {
-    if (valid) {
-      loading.value = true
-      // 勾选了需要记住密码设置在 cookie 中设置记住邮箱和密码
-      if (loginForm.value.rememberMe) {
-        Cookies.set('email', loginForm.value.email, { expires: 30 })
-        // Cookies.set('password', encrypt(loginForm.value.password), { expires: 30 })
-        Cookies.set('rememberMe', loginForm.value.rememberMe.toString(), { expires: 30 })
-      } else {
-        // 否则移除
-        Cookies.remove('email')
-        Cookies.remove('password')
-        Cookies.remove('rememberMe')
-      }
-      // 调用action的登录方法
-      userStore
-        .login(loginForm.value)
-        .then((res: any) => {
-          // 假设登录成功后返回用户角色
-          const role = res.data.role
-          if (role === 'admin') {
-            router.push('/admin')
-          } else {
-            router.push('/repair')
-          }
-          loading.value = false
-        })
-        .catch((error: any) => {
-          console.error('登录失败:', error)
-          loading.value = false
-        })
+const handleLogin = async () => {
+  try {
+    const valid = await new Promise<boolean>((resolve) => {
+      loginRef.value?.validate((valid: boolean) => {
+        resolve(valid)
+      })
+    })
+
+    if (!valid) return
+
+    loading.value = true
+
+    // 处理记住密码逻辑
+    if (loginForm.value.rememberMe) {
+      Cookies.set('email', loginForm.value.email, { expires: 30 })
+      Cookies.set('password', encrypt(loginForm.value.password), { expires: 30 })
+      Cookies.set('rememberMe', loginForm.value.rememberMe.toString(), { expires: 30 })
+    } else {
+      // 否则移除
+      Cookies.remove('email')
+      Cookies.remove('password')
+      Cookies.remove('rememberMe')
     }
-  })
-}
 
-// 注册处理
-const handleRegister = () => {
-  if (registerForm.value.password !== registerForm.value.confirmPassword) {
-    alert('两次输入的密码不一致！')
-    return
+    // 调用action的登录方法
+    const res = await userStore.login(loginForm.value) as any
+    const role = res?.data?.role || ''
+    const redirectPath = route.query.redirect || '/'
+
+    // 根据用户角色决定重定向目标
+    if (role === 'admin') {
+      router.push('/admin')
+
+    } else {
+      router.push({
+        path:typeof route.query.redirect === 'string'?route.query.redirect:'/'
+      }) // 执行跳转逻辑
+      ElMessage.success('登录成功')
+    }
+  } catch (error) {
+      console.error('登录失败:', error)
+      ElMessage.error('登录失败，请检查邮箱和密码')
+    } finally {
+      loading.value = false
+    }
+
   }
-
-  console.log('注册表单提交:', registerForm.value)
-  // 这里添加注册逻辑
-  alert('注册成功！')
-  // 注册成功后切换到登录页
-  activeTab.value = 'login'
-}
 </script>
 
 <style lang="scss" scoped>
-@use '../styles/main.scss' as *;
+/* @use '../styles/main.scss' as *; */
 @use 'sass:color';
 
-:deep(.el-form-item.is-required) > .el-form-item__label::before {
+:deep(.el-form-item.is-required)>.el-form-item__label::before {
   display: none !important;
+}
+
+// 调整表单项布局为水平方向
+:deep(.el-form-item) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+:deep(.el-form-item__label) {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: $color-gray-700;
+  padding-right: 12px;
+  text-align: left; // 改为左对齐
+  white-space: nowrap;
+}
+
+:deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
+  background-color: $color-blue-primary;
+  border-color: $color-blue-primary;
+  color: $color-blue-primary;
+}
+
+// 覆盖 el-checkbox 选中时标签文字颜色
+:deep(.el-checkbox__input.is-checked + .el-checkbox__label) {
+  color: $color-blue-primary;
 }
 
 // 认证页面容器
@@ -272,11 +227,9 @@ const handleRegister = () => {
   &__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba($color-ochre-light, 0.9),
-      rgba($color-blue-light, 0.9)
-    );
+    background: linear-gradient(135deg,
+        rgba($color-ochre-light, 0.9),
+        rgba($color-blue-light, 0.9));
   }
 }
 
@@ -287,7 +240,7 @@ const handleRegister = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: $spacing-6;
+  /* padding: $spacing-6; */
 
   @media (min-width: $breakpoint-md) {
     padding: $spacing-12;
@@ -330,14 +283,17 @@ const handleRegister = () => {
 .auth-form-container .el-form {
   width: 100%;
 }
+
 .auth-form-container .el-form-item {
   margin-bottom: 20px;
 }
+
 .auth-form-container .el-input {
   height: 38px;
   font-size: 1rem;
   width: 100%;
 }
+
 .auth-form-container .el-button {
   width: 100%;
   margin-top: 15px;
@@ -349,6 +305,7 @@ const handleRegister = () => {
   font-weight: 500;
   transition: background 0.2s;
 }
+
 .auth-form-container .el-button:hover {
   background: linear-gradient(90deg, #e0c3fc 20%, #508ecd 80%);
 }
@@ -397,27 +354,6 @@ const handleRegister = () => {
   }
 }
 
-// 表单组
-.form-group {
-  margin-bottom: $spacing-4;
-}
-
-// 表单标签
-.form-label {
-  display: block;
-  font-size: $font-size-sm;
-  font-weight: 500;
-  color: $color-gray-700;
-  margin-bottom: $spacing-2;
-}
-
-// 表单输入包装器
-.form-input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
 // 表单复选框
 .form-checkbox {
   display: flex;
@@ -431,7 +367,7 @@ const handleRegister = () => {
     position: absolute;
     opacity: 0;
 
-    &:checked + .form-checkbox__mark {
+    &:checked+.form-checkbox__mark {
       background-color: $color-blue-primary;
       border-color: $color-blue-primary;
 
@@ -467,53 +403,13 @@ const handleRegister = () => {
   }
 }
 
-// 表单链接
-.form-link {
-  font-size: $font-size-sm;
-  color: $color-blue-primary;
-  text-decoration: none;
-  transition: $transition-base;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-// 表单按钮
-.form-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: $spacing-3 $spacing-4;
-  font-size: $font-size-base;
-  font-weight: 500;
-  color: $color-white;
-  background-color: $color-blue-primary;
-  border: none;
-  border-radius: $border-radius;
-  transition: $transition-base;
-  gap: $spacing-2;
-
-  &:hover {
-    background-color: color.adjust($color-blue-primary, $lightness: -10%);
-  }
-
-  svg {
-    transition: transform 0.2s ease;
-  }
-
-  &:hover svg {
-    transform: translateX(3px);
-  }
-}
-
 // 动画
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -524,9 +420,11 @@ const handleRegister = () => {
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.05);
   }
+
   100% {
     transform: scale(1);
   }
@@ -536,9 +434,11 @@ const handleRegister = () => {
   0% {
     transform: translateY(0) rotate(0deg);
   }
+
   50% {
     transform: translateY(-20px) rotate(5deg);
   }
+
   100% {
     transform: translateY(0) rotate(0deg);
   }

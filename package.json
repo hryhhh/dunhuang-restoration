@@ -26,6 +26,7 @@
     "@types/crypto-js": "^4.2.2",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.15.18",
+    "@types/nprogress": "^0.2.3",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@vitejs/plugin-vue": "^5.2.4",
     "@vue/tsconfig": "^0.7.0",

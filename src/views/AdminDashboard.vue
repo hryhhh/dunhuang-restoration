@@ -5,9 +5,10 @@
 
     <!-- 主内容区域 -->
     <main class="main-content">
+
       <AdminHeader />
-      <AdminToolBar />
       <AdminStats />
+      <AdminToolBar />
       <AdminRecords />
       <AdminDetail />
 
