@@ -67,6 +67,7 @@
 <script setup lang="ts">
 import Footer from '../components/home/Footer.vue'
 import { ref } from 'vue'
+import { onMounted } from 'vue'
 import Cookies from 'js-cookie'
 import { useRouter, useRoute } from 'vue-router'
 import useUserStore from '../store/modules/user'
@@ -91,6 +92,11 @@ const showConfirmPassword = ref(false)
 const router = useRouter()
 // 从路由参数中获取重定向路径
 const route = useRoute()
+onMounted(() => {
+  if(route.query.tab==='register'){
+    activeTab.value = 'register'
+  }
+})
 redirect.value = route.query.redirect || '/'
 
 // 使用 userStore

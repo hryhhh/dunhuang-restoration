@@ -32,7 +32,7 @@ const goToLogin = () => {
   router.push('/login');
 };
 const goToRegister = () => {
-  router.push('/register');
+  router.push('/login?tab=register');
 }
 </script>
 
