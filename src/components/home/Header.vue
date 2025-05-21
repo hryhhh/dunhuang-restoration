@@ -16,8 +16,8 @@
             </nav>
 
           <div class="header__actions">
-            <button class="btn btn--outline" @click="goToClick">登录</button>
-            <button class="btn btn--primary">注册</button>
+            <button class="btn btn--outline" @click="goToLogin">登录</button>
+            <button class="btn btn--primary" @click="goToRegister">注册</button>
           </div>
         </div>
       </div>
@@ -28,10 +28,12 @@
 <script setup>
 import { useRouter } from 'vue-router';
 const router = useRouter();
-const goToClick = () => {
+const goToLogin = () => {
   router.push('/login');
 };
-
+const goToRegister = () => {
+  router.push('/register');
+}
 </script>
 
 <style lang='scss' scoped>

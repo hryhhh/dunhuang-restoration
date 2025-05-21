@@ -55,7 +55,7 @@
 
         <!-- 注册表单 -->
 
-        <register v-if="activeTab === 'register'" v-model:active-tab="activeTab" />
+        <Register v-if="activeTab === 'register'" v-model:active-tab="activeTab" />
       </div>
     </div>
 
@@ -73,7 +73,7 @@ import useUserStore from '../store/modules/user'
 import { encrypt } from '@/utils/encrypt'
 import { ElMessage, ElForm } from 'element-plus'
 import type { FormRules } from 'element-plus'
-import register from './register.vue'
+import Register from './register.vue'
 
 // 当前激活的标签
 const activeTab = ref('login')
@@ -83,9 +83,9 @@ const redirect: any = ref(null)
 // 定义 loginRef
 const loginRef = ref<InstanceType<typeof ElForm>>()
 
-// // 是否显示密码
-// const showPassword = ref(false)
-// const showConfirmPassword = ref(false)
+// 是否显示密码
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
 
 // 引入路由
 const router = useRouter()
@@ -141,7 +141,7 @@ const handleLogin = async () => {
     // 调用action的登录方法
     const res = await userStore.login(loginForm.value) as any
     const role = res?.data?.role || ''
-    const redirectPath = route.query.redirect || '/'
+
 
     // 根据用户角色决定重定向目标
     if (role === 'admin') {

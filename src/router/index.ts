@@ -36,6 +36,12 @@ export const constantRoutes: RouteRecordRaw[] = [
     meta: { title: '登录' },
   },
   {
+    path: '/register',
+    name: 'register',
+    component: () => import('../views/Register.vue' as unknown as string),
+    meta: { title: '注册' },
+  },
+  {
     path: '/repair',
     name: 'repair',
     component: () => import('../views/RepairedView.vue'),

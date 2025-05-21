@@ -1,10 +1,12 @@
 <template>
   <!-- 注册表单 -->
   <div class="auth-form">
+    <div v-if="activeTab === 'register'" class="auth-form-status"></div>
     <h2 class="auth-form__title">创建账号</h2>
     <p class="auth-form__subtitle">注册一个新账号以使用敦煌壁画修复系统</p>
 
-    <el-form ref="registerRef" :model="registerForm" :rules="registerRules" class="auth-form" label-position="left" label-width="80px">
+    <el-form ref="registerRef" :model="registerForm" :rules="registerRules" class="auth-form" label-position="left"
+      label-width="80px">
       <el-form-item label="用户名" prop="username">
         <el-input v-model="registerForm.username" type="text" placeholder="请输入用户名"></el-input>
       </el-form-item>
@@ -12,31 +14,25 @@
         <el-input v-model="registerForm.email" type="text" placeholder="请输入邮箱"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input
-          v-model="registerForm.password"
-          type="password"
-          placeholder="请输入密码"
-        ></el-input>
+        <el-input v-model="registerForm.password" type="password" placeholder="请输入密码" show-password></el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="confirmPassword">
-        <el-input
-          v-model="registerForm.confirmPassword"
-          type="password"
-          placeholder="请再次输入密码"
-          @keyup.enter="handleRegister"
-        ></el-input>
+        <el-input v-model="registerForm.confirmPassword" type="password" placeholder="请再次输入密码" show-password
+          @keyup.enter="handleRegister"></el-input>
       </el-form-item>
       <!-- 勾选同意协议 -->
-      <label class="form-checkbox">
-        <input type="checkbox" v-model="registerForm.agreement" required />
-        <span class="form-checkbox__mark"></span>
-        <span
-          >我已阅读并同意 <a href="#" class="form-link">服务条款</a> 和
-          <a href="#" class="form-link">隐私政策</a></span
-        >
-      </label>
+      <el-form-item prop="agreement">
+        <label class="form-checkbox">
+          <input type="checkbox" v-model="registerForm.agreement" required />
+          <span class="form-checkbox__mark"></span>
+          <span>我已阅读并同意 <a href="#" class="form-link">服务条款</a> 和
+            <a href="#" class="form-link">隐私政策</a></span>
+        </label>
+      </el-form-item>
 
-      <el-button @click="handleRegister">注册</el-button>
+      <el-button @click="handleRegister" :loading="loading">
+        {{ loading ? '注册中...' : '注册' }}
+      </el-button>
     </el-form>
   </div>
 </template>
@@ -45,8 +41,7 @@
 import { ElMessage, ElForm } from 'element-plus'
 import type { FormRules } from 'element-plus'
 import { ref } from 'vue'
-import Cookies from 'js-cookie'
-import { useRouter, useRoute } from 'vue-router'
+import { register } from '@/api/login'
 
 // 引入定义的 props
 defineProps({
@@ -56,6 +51,8 @@ defineProps({
   },
 })
 
+const loading = ref(false)
+const registerRef = ref<InstanceType<typeof ElForm>>()
 const emit = defineEmits(['update:active-tab'])
 
 // 注册表单数据
@@ -94,38 +91,68 @@ const registerRules: FormRules = {
       trigger: 'blur',
     },
   ],
+  agreement: [
+    {
+      validator: (rule, value, callback) => {
+        if (!value) {
+          callback(new Error('请阅读并同意服务条款和隐私政策'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'change',
+    }
+  ]
 }
-
 
 // 注册处理
 const handleRegister = async () => {
+  if (loading.value) return
 
-  const registerRef = ref<InstanceType<typeof ElForm>>();
   try {
-    // 验证表单
-    const valid = await new Promise((resolve, reject) => {
-      registerRef.value?.validate((valid) => {
 
-        resolve(true);
-      });
-    });
-    if (!valid) return;
-    console.log('注册表单提交:', registerForm.value)
-    ElMessage.success('注册成功！');
+    await registerRef.value?.validate()
+
+    loading.value = true
+
+    await register(registerForm.value.email, registerForm.value.password)
+
+    ElMessage.success('注册成功！ 请登录')
+    // 注册成功后跳转到登录页面,
     emit('update:active-tab', 'login')
-  } catch (error) {
-    console.error('注册失败:', error);
-    ElMessage.error('注册失败，请稍后重试');
-  }
+  } catch (error: any) {
+    if (error.response) {
+      const status = error.response.status
+      if (status === 409) {
+        ElMessage.error('邮箱已被注册!')
+      } else if (status === 400) {
+        ElMessage.error('提交的数据不符合要求!')
+      } else {
+        ElMessage.error(`注册失败: ${error.response.data.message || '未知错误'}`)
+      }
+    }
+    else if (error.message) {
+      // 表单验证错误或其他错误
+      ElMessage.error(error.message)
+    } else {
+      // 未知错误
+      ElMessage.error('注册失败!请稍后重试...')
+    }
+    console.log('注册失败', error);
 
+  } finally {
+    loading.value = false
+  }
 }
+
+
 </script>
 
 <style lang="scss" scoped>
 /* @use '../styles/main.scss' as *; */
 @use 'sass:color';
 
-:deep(.el-form-item.is-required) > .el-form-item__label::before {
+:deep(.el-form-item.is-required)>.el-form-item__label::before {
   display: none !important;
 }
 
@@ -142,7 +169,7 @@ const handleRegister = async () => {
   font-size: 0.95rem;
   color: $color-gray-700;
   padding-right: 12px;
-  text-align: left;  // 改为左对齐
+  text-align: left; // 改为左对齐
   white-space: nowrap;
 }
 
@@ -151,13 +178,14 @@ const handleRegister = async () => {
   margin-left: -20px !important;
 }
 
-
 .auth-form-container .el-form {
   width: 100%;
 }
+
 .auth-form-container .el-form-item {
   margin-bottom: 14px;
 }
+
 .auth-form-container .el-input__wrapper {
   border-radius: 8px;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
@@ -174,6 +202,7 @@ const handleRegister = async () => {
   font-size: 1rem;
   width: 100%;
 }
+
 .auth-form-container .el-button {
   width: 100%;
   height: 44px;
@@ -225,7 +254,6 @@ const handleRegister = async () => {
   width: 100%;
   padding: $spacing-6;
 
-
   &__title {
     font-size: $font-size-xl;
     font-weight: 600;
@@ -240,7 +268,6 @@ const handleRegister = async () => {
     margin-left: 20px;
   }
 }
-
 
 // 表单组
 .form-group {
@@ -281,7 +308,7 @@ const handleRegister = async () => {
     position: absolute;
     opacity: 0;
 
-    &:checked + .form-checkbox__mark {
+    &:checked+.form-checkbox__mark {
       background-color: $color-blue-primary;
       border-color: $color-blue-primary;
 
@@ -364,6 +391,7 @@ const handleRegister = async () => {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -374,9 +402,11 @@ const handleRegister = async () => {
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.05);
   }
+
   100% {
     transform: scale(1);
   }
@@ -386,9 +416,11 @@ const handleRegister = async () => {
   0% {
     transform: translateY(0) rotate(0deg);
   }
+
   50% {
     transform: translateY(-20px) rotate(5deg);
   }
+
   100% {
     transform: translateY(0) rotate(0deg);
   }
