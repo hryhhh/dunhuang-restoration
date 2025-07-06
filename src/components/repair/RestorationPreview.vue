@@ -59,6 +59,15 @@
         </div>
 
         <div v-else-if="originalImage" class="restoration-preview__single">
+          <LazyImage
+          :src="originalImage"
+          :placeholder-src="originalImage"
+          alt="原始壁画"
+          class="restoration-preview__image"
+          :threshold="0.1"
+          :root-margin="'50px'"
+
+          />
           <img :src="originalImage" alt="原始壁画" class="restoration-preview__image" />
           <div class="restoration-preview__image-label">原始壁画</div>
         </div>
@@ -66,12 +75,12 @@
         <div v-else class="restoration-preview__empty">
           <p>请上传壁画图片以查看预览</p>
         </div>
-      </div>
-    </div>
+      </div> </div>
   </template>
 
   <script setup lang="ts">
   import { ref, watch } from 'vue';
+  import LazyImage from '../common/LazyImage.vue';
 
   const props = defineProps({
     originalImage: {
