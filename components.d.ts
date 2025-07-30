@@ -24,6 +24,7 @@ declare module 'vue' {
     Header: typeof import('./src/components/home/Header.vue')['default']
     HeroFeatures: typeof import('./src/components/home/HeroFeatures.vue')['default']
     ImageUploader: typeof import('./src/components/repair/ImageUploader.vue')['default']
+    LazyImage: typeof import('./src/components/common/LazyImage.vue')['default']
     Process: typeof import('./src/components/home/Process.vue')['default']
     RepairCaseDisplay: typeof import('./src/components/home/RepairCaseDisplay.vue')['default']
     RestorationHistory: typeof import('./src/components/repair/RestorationHistory.vue')['default']

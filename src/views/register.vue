@@ -3,7 +3,7 @@
   <div class="auth-form">
     <div v-if="activeTab === 'register'" class="auth-form-status"></div>
     <h2 class="auth-form__title">创建账号</h2>
-    <p class="auth-form__subtitle">注册一个新账号以使用敦煌壁画修复系统</p>
+    <p class="auth-form__subtitle">注册一个新账号以使用北齐壁画修复系统</p>
 
     <el-form ref="registerRef" :model="registerForm" :rules="registerRules" class="auth-form" label-position="left"
       label-width="80px">

@@ -6,10 +6,10 @@
           <div class="about__info">
             <h2 class="about__title">关于我们</h2>
             <p class="about__description">
-              我们是一群热爱文化遗产保护的在校大学生，通过计算机视觉和人工智能技术，尝试为敦煌壁画的数字化保护贡献自己的一份力量。
+              我们是一群热爱文化遗产保护的在校大学生，通过计算机视觉和人工智能技术，尝试为北齐壁画的数字化保护贡献自己的一份力量。
             </p>
             <p class="about__description">
-              敦煌壁画修复系统是我们多年研究成果的结晶，旨在为敦煌莫高窟等珍贵文化遗产提供数字化保护解决方案，让千年壁画焕发新生。
+              北齐壁画修复系统是我们多年研究成果的结晶，旨在为北齐莫高窟等珍贵文化遗产提供数字化保护解决方案，让千年壁画焕发新生。
             </p>
             <div class="about__actions">
               <button class="btn btn--secondary">了解团队</button>
@@ -17,7 +17,7 @@
             </div>
           </div>
           <div class="about__image">
-            <img src="../../assets//images/about.jpg" alt="敦煌研究院工作场景" />
+            <img src="../../assets//images/about.jpg" alt="北齐研究院工作场景" />
           </div>
         </div>
       </div>

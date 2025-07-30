@@ -3,7 +3,7 @@
   <section class="hero">
     <div class="container">
       <div class="hero__content">
-        <h1 class="hero__title">敦煌壁画数字化修复系统</h1>
+        <h1 class="hero__title">北齐壁画数字化修复系统</h1>
         <p class="hero__description">运用先进的人工智能技术，为千年文化瑰宝赋予新生</p>
         <div class="hero__actions">
           <button class="btn btn--primary btn--lg" @click="goToRepair">开始修复</button>
@@ -20,7 +20,7 @@
         <div class="badge">智能修复</div>
         <h2 class="section-title">先进的壁画修复技术</h2>
         <p class="section-description">
-          我们的系统结合了传统修复工艺与现代人工智能技术，为敦煌壁画的保护与传承提供全新解决方案
+          我们的系统结合了传统修复工艺与现代人工智能技术，为北齐壁画的保护与传承提供全新解决方案
         </p>
       </div>
 
@@ -71,7 +71,7 @@
           <h3 class="feature-card__title">AI修复</h3>
           <p class="feature-card__subtitle">基于深度学习的智能修复算法，还原壁画原貌</p>
           <p class="feature-card__description">
-            系统通过学习敦煌壁画的艺术风格和特征，能够智能推断缺失部分的内容，实现高度还原的修复效果。
+            系统通过学习北齐壁画的艺术风格和特征，能够智能推断缺失部分的内容，实现高度还原的修复效果。
           </p>
         </div>
 

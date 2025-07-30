@@ -4,8 +4,8 @@
         <div class="header__content">
           <div class="header__logo">
             <a href="/" class="logo">
-              <img src="../../assets/images/logo.jpg" width="50" height="50" alt="敦煌壁画修复系统" />
-              <span>敦煌壁画修复系统</span>
+              <img src="../../assets/images/logo.jpg" width="50" height="50" alt="北齐壁画修复系统" />
+              <span>北齐壁画修复系统</span>
             </a>
           </div>
 

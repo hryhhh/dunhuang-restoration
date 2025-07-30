@@ -3,7 +3,7 @@
 <footer class="footer">
       <div class="container">
         <div class="footer__content">
-          <p class="footer__copyright">© 2025 敦煌壁画修复系统. 版权所有.</p>
+          <p class="footer__copyright">© 2025 北齐壁画修复系统. 版权所有.</p>
           <nav class="footer__nav">
             <a href="/terms" class="footer__link">使用条款</a>
             <a href="/privacy" class="footer__link">隐私政策</a>

@@ -3,8 +3,8 @@
   <aside class="sidebar" :class="{ 'sidebar--collapsed': sidebarCollapsed }">
     <div class="sidebar__header">
       <div class="sidebar__logo">
-        <img src="../../assets/images/logo.jpg" alt="敦煌壁画修复系统" />
-        <span v-if="!sidebarCollapsed">敦煌壁画修复系统</span>
+        <img src="../../assets/images/logo.jpg" alt="北齐壁画修复系统" />
+        <span v-if="!sidebarCollapsed">北齐壁画修复系统</span>
       </div>
       <button class="sidebar__toggle" @click="toggleSidebar">
         <svg

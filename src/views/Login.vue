@@ -16,7 +16,7 @@
 
     <div class="auth-content">
       <div class="auth-logo">
-        <h1 class="auth-logo__title">敦煌壁画修复系统</h1>
+        <h1 class="auth-logo__title">北齐壁画修复系统</h1>
       </div>
 
       <!-- 表单容器 -->

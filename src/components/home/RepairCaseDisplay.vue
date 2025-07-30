@@ -6,7 +6,7 @@
             <div class="badge badge--ochre">修复案例</div>
             <h2 class="section-title">壁画修复成果展示</h2>
             <p class="section-description">
-              见证千年壁画的数字化重生，展现敦煌艺术的永恒魅力
+              见证千年壁画的数字化重生，展现北齐艺术的永恒魅力
             </p>
           </div>
 
@@ -38,7 +38,7 @@
             <div class="gallery__tab-content" v-if="activeTab === 'case1'">
               <div class="restoration-case">
                 <div class="restoration-case__info">
-                  <h3 class="restoration-case__title">莫高窟第329窟飞天壁画</h3>
+                  <h3 class="restoration-case__title">第329窟飞天壁画</h3>
                   <p class="restoration-case__description">
                     该壁画创作于唐代，因年代久远出现了严重的褪色和局部脱落。通过我们的AI修复系统，成功还原了飞天形象的鲜艳色彩和精细线条。
                   </p>
@@ -71,7 +71,7 @@
             <div class="gallery__tab-content" v-if="activeTab === 'case2'">
               <div class="restoration-case">
                 <div class="restoration-case__info">
-                  <h3 class="restoration-case__title">莫高窟第57窟菩萨像</h3>
+                  <h3 class="restoration-case__title">第57窟菩萨像</h3>
                   <p class="restoration-case__description">
                     此菩萨像壁画创作于北魏时期，面部细节已经模糊不清。通过AI修复技术，成功恢复了菩萨面部的精细特征和庄严神态。
                   </p>
@@ -104,7 +104,7 @@
             <div class="gallery__tab-content" v-if="activeTab === 'case3'">
               <div class="restoration-case">
                 <div class="restoration-case__info">
-                  <h3 class="restoration-case__title">莫高窟第158窟佛像壁画</h3>
+                  <h3 class="restoration-case__title">第158窟佛像壁画</h3>
                   <p class="restoration-case__description">
                     该佛像壁画创作于盛唐时期，壁画中部出现了大面积脱落。通过我们的修复系统，成功填补了缺失部分，恢复了壁画的完整性。
                   </p>

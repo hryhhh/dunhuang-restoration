@@ -74,7 +74,7 @@
               <div class="process-step__content">
                 <h3 class="process-step__title">成果展示与应用</h3>
                 <p class="process-step__description">
-                  修复成果可用于文物展示、学术研究、数字博物馆等多种场景，为敦煌文化的传承与推广提供新的可能。
+                  修复成果可用于文物展示、学术研究、数字博物馆等多种场景，为北齐文化的传承与推广提供新的可能。
                 </p>
               </div>
             </div>
