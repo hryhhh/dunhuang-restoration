@@ -38,21 +38,21 @@
   const historyItems = ref([
     {
       id: 1,
-      title: '莫高窟第445窟飞天壁画',
+      title: '飞天壁画',
       date: '2025-05-10',
       originalImage: 'https://typora-hhhhry.oss-cn-beijing.aliyuncs.com/OIP-C%20(7).jpg',
       restoredImage: 'https://typora-hhhhry.oss-cn-beijing.aliyuncs.com/OIP-C%20(7).jpg'
     },
     {
       id: 2,
-      title: '莫高窟第57窟菩萨像',
+      title: '菩萨像',
       date: '2025-05-08',
       originalImage: 'https://typora-hhhhry.oss-cn-beijing.aliyuncs.com/OIP-C%20(7).jpg',
       restoredImage: 'https://typora-hhhhry.oss-cn-beijing.aliyuncs.com/rc-upload-1628405839799-18.jpg'
     },
     {
       id: 3,
-      title: '莫高窟第158窟佛像壁画',
+      title: '佛像壁画',
       date: '2025-05-05',
       originalImage: '../assets/03.jpg',
       restoredImage: 'https://typora-hhhhry.oss-cn-beijing.aliyuncs.com/OIP-C%20(10).jpg'

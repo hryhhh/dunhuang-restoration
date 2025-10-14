@@ -38,9 +38,9 @@
             <div class="gallery__tab-content" v-if="activeTab === 'case1'">
               <div class="restoration-case">
                 <div class="restoration-case__info">
-                  <h3 class="restoration-case__title">第329窟飞天壁画</h3>
+                  <h3 class="restoration-case__title">飞天壁画</h3>
                   <p class="restoration-case__description">
-                    该壁画创作于唐代，因年代久远出现了严重的褪色和局部脱落。通过我们的AI修复系统，成功还原了飞天形象的鲜艳色彩和精细线条。
+                    该壁画因年代久远出现了严重的褪色和局部脱落。通过我们的AI修复系统，成功还原了飞天形象的鲜艳色彩和精细线条。
                   </p>
                   <div class="restoration-case__legend">
                     <div class="legend-item">

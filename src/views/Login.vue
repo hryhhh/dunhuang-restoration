@@ -74,7 +74,7 @@ import useUserStore from '../store/modules/user'
 import { encrypt } from '@/utils/encrypt'
 import { ElMessage, ElForm } from 'element-plus'
 import type { FormRules } from 'element-plus'
-import Register from './register.vue'
+import Register from './Register.vue'
 
 // 当前激活的标签
 const activeTab = ref('login')
@@ -121,52 +121,51 @@ const loginRules: FormRules = {
 
 // 登录处理
 const handleLogin = async () => {
+  loading.value = true
   try {
+    // 表单校验
     const valid = await new Promise<boolean>((resolve) => {
       loginRef.value?.validate((valid: boolean) => {
         resolve(valid)
       })
     })
-
     if (!valid) return
 
-    loading.value = true
-
-    // 处理记住密码逻辑
+    // 记住密码逻辑（可保留）
     if (loginForm.value.rememberMe) {
       Cookies.set('email', loginForm.value.email, { expires: 30 })
       Cookies.set('password', encrypt(loginForm.value.password), { expires: 30 })
       Cookies.set('rememberMe', loginForm.value.rememberMe.toString(), { expires: 30 })
     } else {
-      // 否则移除
       Cookies.remove('email')
       Cookies.remove('password')
       Cookies.remove('rememberMe')
     }
 
     // 调用action的登录方法
-    const res = await userStore.login(loginForm.value) as any
-    const role = res?.data?.role || ''
-
+    // const res = await userStore.login(loginForm.value) as any
+    // const role = res?.data?.role || ''
 
     // 根据用户角色决定重定向目标
-    if (role === 'admin') {
-      router.push('/admin')
+    // if (role === 'admin') {
+    //   router.push('/admin')
+    // } else {
+    //   router.push({
+    //     path:typeof route.query.redirect === 'string'?route.query.redirect:'/repair'
+    //   }) // 执行跳转逻辑
+    //   ElMessage.success('登录成功')
+    // }
 
-    } else {
-      router.push({
-        path:typeof route.query.redirect === 'string'?route.query.redirect:'/'
-      }) // 执行跳转逻辑
-      ElMessage.success('登录成功')
-    }
+    // 直接跳转到修复页面
+    router.push('/repair')
+    ElMessage.success('登录成功')
   } catch (error) {
-      console.error('登录失败:', error)
-      ElMessage.error('登录失败，请检查邮箱和密码')
-    } finally {
-      loading.value = false
-    }
-
+    console.error('登录失败:', error)
+    ElMessage.error('登录失败，请检查邮箱和密码')
+  } finally {
+    loading.value = false
   }
+}
 </script>
 
 <style lang="scss" scoped>
