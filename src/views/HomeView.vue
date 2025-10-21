@@ -1,5 +1,5 @@
 <template>
-  <div class="dunhuang-app">
+  <div class="beiqi-app">
     <Header />
     <main class="main">
       <HeroFeatures />
@@ -205,7 +205,7 @@ img {
 }
 
 // 应用程序
-.dunhuang-app {
+.beiqi-app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
